@@ -124,13 +124,15 @@ class LOBTradingEnv(gym.Env):
     self._generate_background_liquidity()
     self.step_count += 1
 
+    max_inventory = 5
+
     if action == 1:
-      if self.cash > self.market.last_price:
+      if self.cash > self.market.last_price and self.inventory < max_inventory:
         exec_price = self.market.match_market_order("buy", 1)
         self.inventory += 1
         self.cash -= exec_price
     elif action == 2:
-      if self.inventory > -5:
+      if self.inventory > -max_inventory:
         exec_price = self.market.match_market_order("sell", 1)
         self.inventory -= 1
         self.cash += exec_price
